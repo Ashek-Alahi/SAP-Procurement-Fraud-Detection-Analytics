@@ -15,7 +15,7 @@
 --   * Blank approved_by values are treated as missing approvals and reported as
 --     approval control exceptions.
 
-WITH approval_exceptions AS (
+WITH approval_base AS (
     SELECT
         po.po_number,
         po.vendor_id,
@@ -37,21 +37,22 @@ WITH approval_exceptions AS (
             WHEN e.employee_id IS NULL THEN 'APPROVER_NOT_FOUND'
             WHEN e.is_active <> 'True' THEN 'INACTIVE_APPROVER'
             WHEN CAST(po.total_amount AS INTEGER) > CAST(e.approval_limit AS INTEGER) THEN 'LIMIT_EXCEEDED'
-        END AS exception_category,
-        CASE
-            WHEN e.approval_limit IS NULL THEN CAST(po.total_amount AS INTEGER)
-            ELSE CAST(po.total_amount AS INTEGER) - CAST(e.approval_limit AS INTEGER)
-        END AS excess_amount_jpy
+        END AS exception_category
     FROM purchase_orders AS po
     LEFT JOIN employees AS e
         ON po.approved_by = e.employee_id
     LEFT JOIN vendors AS v
         ON po.vendor_id = v.vendor_id
-    WHERE po.approved_by IS NULL
-       OR TRIM(po.approved_by) = ''
-       OR e.employee_id IS NULL
-       OR e.is_active <> 'True'
-       OR CAST(po.total_amount AS INTEGER) > CAST(e.approval_limit AS INTEGER)
+), approval_exceptions AS (
+    SELECT
+        *,
+        CASE
+            WHEN exception_category IN ('MISSING_APPROVAL', 'APPROVER_NOT_FOUND', 'INACTIVE_APPROVER') THEN po_amount_jpy
+            WHEN exception_category = 'LIMIT_EXCEEDED' THEN po_amount_jpy - approver_limit_jpy
+            ELSE 0
+        END AS excess_amount_jpy
+    FROM approval_base
+    WHERE exception_category IS NOT NULL
 )
 SELECT
     po_number,
@@ -65,6 +66,7 @@ SELECT
     approver_master_level,
     po_recorded_approval_level,
     approver_limit_jpy,
+    po_recorded_threshold_limit_jpy,
     excess_amount_jpy,
     exception_category,
     approval_date,
@@ -74,29 +76,31 @@ FROM approval_exceptions
 ORDER BY excess_amount_jpy DESC, po_amount_jpy DESC, po_date DESC;
 
 -- Executive roll-up: approval bypass exposure by exception category and department.
-WITH approval_exceptions AS (
+WITH approval_base AS (
     SELECT
         po.po_number,
         CAST(po.total_amount AS INTEGER) AS po_amount_jpy,
         e.department AS approver_department,
+        CAST(e.approval_limit AS INTEGER) AS approver_limit_jpy,
         CASE
             WHEN po.approved_by IS NULL OR TRIM(po.approved_by) = '' THEN 'MISSING_APPROVAL'
             WHEN e.employee_id IS NULL THEN 'APPROVER_NOT_FOUND'
             WHEN e.is_active <> 'True' THEN 'INACTIVE_APPROVER'
             WHEN CAST(po.total_amount AS INTEGER) > CAST(e.approval_limit AS INTEGER) THEN 'LIMIT_EXCEEDED'
-        END AS exception_category,
-        CASE
-            WHEN e.approval_limit IS NULL THEN CAST(po.total_amount AS INTEGER)
-            ELSE CAST(po.total_amount AS INTEGER) - CAST(e.approval_limit AS INTEGER)
-        END AS excess_amount_jpy
+        END AS exception_category
     FROM purchase_orders AS po
     LEFT JOIN employees AS e
         ON po.approved_by = e.employee_id
-    WHERE po.approved_by IS NULL
-       OR TRIM(po.approved_by) = ''
-       OR e.employee_id IS NULL
-       OR e.is_active <> 'True'
-       OR CAST(po.total_amount AS INTEGER) > CAST(e.approval_limit AS INTEGER)
+), approval_exceptions AS (
+    SELECT
+        *,
+        CASE
+            WHEN exception_category IN ('MISSING_APPROVAL', 'APPROVER_NOT_FOUND', 'INACTIVE_APPROVER') THEN po_amount_jpy
+            WHEN exception_category = 'LIMIT_EXCEEDED' THEN po_amount_jpy - approver_limit_jpy
+            ELSE 0
+        END AS excess_amount_jpy
+    FROM approval_base
+    WHERE exception_category IS NOT NULL
 )
 SELECT
     exception_category,
