@@ -75,16 +75,30 @@ WITH analysis_parameters AS (
         CAST(invoice_amount AS INTEGER) AS invoice_amount,
         LAG(posting_date) OVER (PARTITION BY vendor_id ORDER BY posting_date, invoice_id) AS previous_posting_date
     FROM invoices
-), long_inactivity_reactivations AS (
+), long_inactivity_events AS (
     SELECT
         vendor_id,
-        MAX(CAST(julianday(posting_date) - julianday(previous_posting_date) AS INTEGER)) AS longest_inactive_gap_days,
-        MAX(posting_date) AS reactivation_posting_date,
-        MAX(CAST(invoice_amount AS INTEGER)) AS reactivation_invoice_amount_jpy
+        posting_date AS reactivation_posting_date,
+        invoice_amount AS reactivation_invoice_amount_jpy,
+        CAST(julianday(posting_date) - julianday(previous_posting_date) AS INTEGER) AS inactive_gap_days,
+        ROW_NUMBER() OVER (
+            PARTITION BY vendor_id
+            ORDER BY
+                CAST(julianday(posting_date) - julianday(previous_posting_date) AS INTEGER) DESC,
+                posting_date DESC,
+                invoice_id DESC
+        ) AS inactivity_rank
     FROM invoice_gaps
     WHERE previous_posting_date IS NOT NULL
       AND CAST(julianday(posting_date) - julianday(previous_posting_date) AS INTEGER) >= (SELECT inactive_days FROM analysis_parameters)
-    GROUP BY vendor_id
+), long_inactivity_reactivations AS (
+    SELECT
+        vendor_id,
+        inactive_gap_days AS longest_inactive_gap_days,
+        reactivation_posting_date,
+        reactivation_invoice_amount_jpy
+    FROM long_inactivity_events
+    WHERE inactivity_rank = 1
 ), abnormal_reasons AS (
     SELECT
         m.vendor_id,
@@ -231,12 +245,24 @@ WITH analysis_parameters AS (
     SELECT vendor_id, invoice_id, posting_date, invoice_amount,
            LAG(posting_date) OVER (PARTITION BY vendor_id ORDER BY posting_date, invoice_id) AS previous_posting_date
     FROM invoices
-), long_inactivity_reactivations AS (
-    SELECT vendor_id, MAX(CAST(invoice_amount AS INTEGER)) AS reactivation_invoice_amount_jpy
+), long_inactivity_events AS (
+    SELECT
+        vendor_id,
+        CAST(invoice_amount AS INTEGER) AS reactivation_invoice_amount_jpy,
+        ROW_NUMBER() OVER (
+            PARTITION BY vendor_id
+            ORDER BY
+                CAST(julianday(posting_date) - julianday(previous_posting_date) AS INTEGER) DESC,
+                posting_date DESC,
+                invoice_id DESC
+        ) AS inactivity_rank
     FROM invoice_gaps
     WHERE previous_posting_date IS NOT NULL
       AND CAST(julianday(posting_date) - julianday(previous_posting_date) AS INTEGER) >= (SELECT inactive_days FROM analysis_parameters)
-    GROUP BY vendor_id
+), long_inactivity_reactivations AS (
+    SELECT vendor_id, reactivation_invoice_amount_jpy
+    FROM long_inactivity_events
+    WHERE inactivity_rank = 1
 ), abnormal_reasons AS (
     SELECT m.vendor_id, 'NEW_VENDOR_HIGH_PAYMENT' AS risk_category, m.total_invoice_amount_jpy AS value_at_risk_jpy
     FROM vendor_invoice_metrics AS m CROSS JOIN analysis_parameters AS p
