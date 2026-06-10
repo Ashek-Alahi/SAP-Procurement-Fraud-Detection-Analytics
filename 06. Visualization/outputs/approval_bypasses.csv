@@ -1,0 +1,16 @@
+fraud_category,risk_level,vendor_id,vendor_name,po_number,po_date,approved_by,approver_name,total_amount,employee_approval_limit,risk_reason,exposure_jpy,event_month
+Approval Bypasses,Medium,VEND030,Shonan Event Staffing,4500000025,2025-10-17,,Missing approver,1246000,0,Approver missing from employee master,1246000,2025-10
+Approval Bypasses,Medium,VEND015,Nara Cultural Events,4500000026,2025-08-20,,Missing approver,1083000,0,Approver missing from employee master,1083000,2025-08
+Approval Bypasses,Medium,VEND033,Mie Towel Service,4500000027,2025-06-30,,Missing approver,1080000,0,Approver missing from employee master,1080000,2025-06
+Approval Bypasses,Medium,VEND010,Yokohama Security Services,4500000024,2025-06-09,,Missing approver,1031000,0,Approver missing from employee master,1031000,2025-06
+Approval Bypasses,Medium,VEND017,Miyagi Dry Goods,4500000022,2025-11-15,,Missing approver,975000,0,Approver missing from employee master,975000,2025-11
+Approval Bypasses,Medium,VEND027,Nagano Mountain Vegetables,4500000032,2025-12-31,EMP008,Daichi Kato,1234000,300000,Amount exceeds approver limit,934000,2025-12
+Approval Bypasses,Medium,VEND001,Sakura Seafood Co.,4500000021,2025-05-12,,Missing approver,809000,0,Approver missing from employee master,809000,2025-05
+Approval Bypasses,Medium,VEND013,Kobe Premium Linens,4500000028,2025-12-30,,Missing approver,752000,0,Approver missing from employee master,752000,2025-12
+Approval Bypasses,Medium,VEND025,Hakone Spa Consultants,4500000023,2025-08-08,,Missing approver,657000,0,Approver missing from employee master,657000,2025-08
+Approval Bypasses,Medium,VEND032,Ibaraki Rice Mills,4500000030,2025-07-28,EMP007,Hana Kobayashi,778000,300000,Amount exceeds approver limit,478000,2025-07
+Approval Bypasses,Medium,VEND031,Toyama Seafood Logistics,4500000033,2025-07-23,EMP019,Naoki Abe,1240000,800000,Amount exceeds approver limit,440000,2025-07
+Approval Bypasses,Medium,VEND009,Nagoya HVAC Engineering,4500000034,2025-07-29,EMP004,Kaito Yamamoto,711000,300000,Amount exceeds approver limit,411000,2025-07
+Approval Bypasses,Medium,VEND012,Aomori Apple Growers,4500000029,2025-01-04,EMP008,Daichi Kato,688000,300000,Amount exceeds approver limit,388000,2025-01
+Approval Bypasses,Medium,VEND040,Daikanyama Design Studio,4500000031,2025-07-24,EMP021,Toma Hashimoto,1185000,800000,Amount exceeds approver limit,385000,2025-07
+Approval Bypasses,Medium,VEND013,Kobe Premium Linens,4500000035,2025-06-17,EMP018,Hinata Mori,854000,800000,Amount exceeds approver limit,54000,2025-06

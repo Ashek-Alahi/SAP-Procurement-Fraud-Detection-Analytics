@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SAP Procurement Fraud Detection Dashboard</title>
+  <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background: #f8fafc; color: #0f172a; }
+    header { background: #0f172a; color: white; padding: 28px 40px; }
+    main { padding: 28px 40px; }
+    .cards { display: grid; grid-template-columns: repeat(2, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .card, .chart, table { background: white; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 1px 2px rgba(15, 23, 42, .08); }
+    .card { padding: 20px; } .metric { font-size: 34px; font-weight: 700; margin-top: 8px; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(320px, 1fr)); gap: 18px; }
+    .chart { min-height: 420px; padding: 12px; }
+    table { border-collapse: collapse; width: 100%; margin: 22px 0; overflow: hidden; }
+    th, td { border-bottom: 1px solid #e2e8f0; padding: 12px; text-align: left; vertical-align: top; }
+    th { background: #e2e8f0; }
+    @media (max-width: 900px) { .grid, .cards { grid-template-columns: 1fr; } main, header { padding: 20px; } }
+  </style>
+</head>
+<body>
+<header>
+  <h1>SAP Procurement Fraud Detection Dashboard</h1>
+  <p>Executive visualization of duplicate invoice, split purchase, abnormal vendor, and approval bypass risks.</p>
+</header>
+<main>
+  <section class="cards">
+    <div class="card"><div>Total suspected exposure</div><div class="metric">¥131,616,000</div></div>
+    <div class="card"><div>Total exceptions</div><div class="metric">102</div></div>
+  </section>
+  <section class="grid">
+    <div id="exposure" class="chart"></div>
+    <div id="mix" class="chart"></div>
+    <div id="monthly" class="chart"></div>
+    <div id="vendors" class="chart"></div>
+  </section>
+  <h2>Executive KPI Summary</h2>
+  <table><thead><tr><th>Fraud category</th><th>Suspects found</th><th>Financial exposure</th><th>Risk level</th></tr></thead><tbody><tr><td>Duplicate Invoices</td><td>67</td><td>¥60,706,000</td><td>High</td></tr><tr><td>Split Purchases</td><td>10</td><td>¥7,253,000</td><td>High</td></tr><tr><td>Abnormal Vendors</td><td>10</td><td>¥52,934,000</td><td>Medium</td></tr><tr><td>Approval Bypasses</td><td>15</td><td>¥10,723,000</td><td>Medium</td></tr></tbody></table>
+  <h2>SAP Control Recommendations</h2>
+  <table><thead><tr><th>Fraud category</th><th>Risk</th><th>Exposure</th><th>Recommended SAP control</th></tr></thead><tbody><tr><td>Duplicate Invoices</td><td>High</td><td>¥60,706,000</td><td>Activate strict MIRO duplicate checks in OMRDC and monitor same-vendor near-match invoices before payment runs.</td></tr><tr><td>Abnormal Vendors</td><td>Medium</td><td>¥52,934,000</td><td>Enforce dual control over vendor master creation, bank account changes, and new-vendor payment review during the first 90 days.</td></tr><tr><td>Approval Bypasses</td><td>Medium</td><td>¥10,723,000</td><td>Configure hard workflow stops when PO value exceeds employee authorization limits and review inactive approver assignments.</td></tr><tr><td>Split Purchases</td><td>High</td><td>¥7,253,000</td><td>Add cumulative same-day vendor spend checks to MM release strategy and route threshold-adjacent POs to a second approver.</td></tr></tbody></table>
+</main>
+<script>
+const payload = {"summary": [{"fraud_category": "Duplicate Invoices", "suspects_found": 67, "financial_exposure_jpy": 60706000.0, "financial_exposure_formatted": "\u00a560,706,000", "risk_level": "High"}, {"fraud_category": "Split Purchases", "suspects_found": 10, "financial_exposure_jpy": 7253000.0, "financial_exposure_formatted": "\u00a57,253,000", "risk_level": "High"}, {"fraud_category": "Abnormal Vendors", "suspects_found": 10, "financial_exposure_jpy": 52934000.0, "financial_exposure_formatted": "\u00a552,934,000", "risk_level": "Medium"}, {"fraud_category": "Approval Bypasses", "suspects_found": 15, "financial_exposure_jpy": 10723000.0, "financial_exposure_formatted": "\u00a510,723,000", "risk_level": "Medium"}], "monthly": [{"month": "2025-11", "fraud_category": "Duplicate Invoices", "exposure_jpy": 7968000.0, "suspects": 9}, {"month": "2025-03", "fraud_category": "Duplicate Invoices", "exposure_jpy": 5438000.0, "suspects": 5}, {"month": "2025-12", "fraud_category": "Duplicate Invoices", "exposure_jpy": 7102000.0, "suspects": 9}, {"month": "2025-10", "fraud_category": "Duplicate Invoices", "exposure_jpy": 6225000.0, "suspects": 6}, {"month": "2026-01", "fraud_category": "Duplicate Invoices", "exposure_jpy": 4287000.0, "suspects": 5}, {"month": "2025-08", "fraud_category": "Duplicate Invoices", "exposure_jpy": 5824000.0, "suspects": 6}, {"month": "2025-07", "fraud_category": "Duplicate Invoices", "exposure_jpy": 6494000.0, "suspects": 6}, {"month": "2025-02", "fraud_category": "Duplicate Invoices", "exposure_jpy": 1364000.0, "suspects": 1}, {"month": "2025-05", "fraud_category": "Duplicate Invoices", "exposure_jpy": 3788000.0, "suspects": 3}, {"month": "2025-04", "fraud_category": "Duplicate Invoices", "exposure_jpy": 2529000.0, "suspects": 3}, {"month": "2025-09", "fraud_category": "Duplicate Invoices", "exposure_jpy": 8070000.0, "suspects": 9}, {"month": "2025-06", "fraud_category": "Duplicate Invoices", "exposure_jpy": 1144000.0, "suspects": 3}, {"month": "2026-02", "fraud_category": "Duplicate Invoices", "exposure_jpy": 312000.0, "suspects": 1}, {"month": "2025-01", "fraud_category": "Duplicate Invoices", "exposure_jpy": 161000.0, "suspects": 1}, {"month": "2025-02", "fraud_category": "Split Purchases", "exposure_jpy": 1633000.0, "suspects": 2}, {"month": "2025-08", "fraud_category": "Split Purchases", "exposure_jpy": 1486000.0, "suspects": 2}, {"month": "2025-01", "fraud_category": "Split Purchases", "exposure_jpy": 773000.0, "suspects": 1}, {"month": "2025-05", "fraud_category": "Split Purchases", "exposure_jpy": 2012000.0, "suspects": 3}, {"month": "2025-04", "fraud_category": "Split Purchases", "exposure_jpy": 1349000.0, "suspects": 2}, {"month": "2025-03", "fraud_category": "Abnormal Vendors", "exposure_jpy": 15096000.0, "suspects": 2}, {"month": "2025-02", "fraud_category": "Abnormal Vendors", "exposure_jpy": 20617000.0, "suspects": 3}, {"month": "2025-01", "fraud_category": "Abnormal Vendors", "exposure_jpy": 7507000.0, "suspects": 1}, {"month": "2025-11", "fraud_category": "Abnormal Vendors", "exposure_jpy": 5283000.0, "suspects": 2}, {"month": "2025-12", "fraud_category": "Abnormal Vendors", "exposure_jpy": 2438000.0, "suspects": 1}, {"month": "2025-09", "fraud_category": "Abnormal Vendors", "exposure_jpy": 1993000.0, "suspects": 1}, {"month": "2025-10", "fraud_category": "Approval Bypasses", "exposure_jpy": 1246000.0, "suspects": 1}, {"month": "2025-08", "fraud_category": "Approval Bypasses", "exposure_jpy": 1740000.0, "suspects": 2}, {"month": "2025-06", "fraud_category": "Approval Bypasses", "exposure_jpy": 2165000.0, "suspects": 3}, {"month": "2025-11", "fraud_category": "Approval Bypasses", "exposure_jpy": 975000.0, "suspects": 1}, {"month": "2025-12", "fraud_category": "Approval Bypasses", "exposure_jpy": 1686000.0, "suspects": 2}, {"month": "2025-05", "fraud_category": "Approval Bypasses", "exposure_jpy": 809000.0, "suspects": 1}, {"month": "2025-07", "fraud_category": "Approval Bypasses", "exposure_jpy": 1714000.0, "suspects": 4}, {"month": "2025-01", "fraud_category": "Approval Bypasses", "exposure_jpy": 388000.0, "suspects": 1}], "top_vendors": [{"vendor_name": "Sakura Seafood Co.", "exposure_jpy": 14798000.0}, {"vendor_name": "Toyama Seafood Logistics", "exposure_jpy": 13467000.0}, {"vendor_name": "Kansai Linen Service", "exposure_jpy": 8954000.0}, {"vendor_name": "Daikanyama Design Studio", "exposure_jpy": 7264000.0}, {"vendor_name": "Roppongi Translation Services", "exposure_jpy": 6065000.0}, {"vendor_name": "Nara Cultural Events", "exposure_jpy": 5108000.0}, {"vendor_name": "Hakone Spa Consultants", "exposure_jpy": 4435000.0}, {"vendor_name": "Aomori Apple Growers", "exposure_jpy": 4286000.0}, {"vendor_name": "Shonan Event Staffing", "exposure_jpy": 4114000.0}, {"vendor_name": "Nippon Facility Maint.", "exposure_jpy": 3991000.0}], "colors": {"Duplicate Invoices": "#dc2626", "Split Purchases": "#ea580c", "Abnormal Vendors": "#ca8a04", "Approval Bypasses": "#2563eb"}};
+const categories = payload.summary.map(row => row.fraud_category);
+const colors = categories.map(category => payload.colors[category]);
+Plotly.newPlot('exposure', [{type:'bar', x: categories, y: payload.summary.map(row => row.financial_exposure_jpy), marker:{color: colors}, text: payload.summary.map(row => row.financial_exposure_formatted), textposition:'auto'}], {title:'Exposure by Fraud Category', yaxis:{title:'JPY'}}, {responsive:true});
+Plotly.newPlot('mix', [{type:'pie', labels: categories, values: payload.summary.map(row => row.suspects_found), marker:{colors}, hole:.45}], {title:'Exception Mix'}, {responsive:true});
+const traces = categories.map(category => {
+  const rows = payload.monthly.filter(row => row.fraud_category === category).sort((a,b) => a.month.localeCompare(b.month));
+  return {type:'scatter', mode:'lines+markers', name:category, x: rows.map(row => row.month), y: rows.map(row => row.exposure_jpy), line:{color: payload.colors[category]}};
+});
+Plotly.newPlot('monthly', traces, {title:'Monthly Exposure Trend', yaxis:{title:'JPY'}}, {responsive:true});
+const vendors = [...payload.top_vendors].reverse();
+Plotly.newPlot('vendors', [{type:'bar', orientation:'h', y: vendors.map(row => row.vendor_name), x: vendors.map(row => row.exposure_jpy), marker:{color:'#475569'}}], {title:'Top 10 Vendors by Exposure', xaxis:{title:'JPY'}}, {responsive:true});
+</script>
+</body>
+</html>

@@ -201,8 +201,14 @@ All data in this project is **simulated** and does not contain any real company 
 │   └── 04_approval_bypass_detection.ipynb
 │
 ├── 📁 06. Visualization
+│   ├── README.md
+│   ├── fraud_dashboard.py
 │   ├── fraud_dashboard.ipynb
-│   └── gitkeep
+│   └── outputs/
+│       ├── fraud_dashboard.html
+│       ├── fraud_dashboard_summary.csv
+│       ├── sap_control_recommendations.csv
+│       └── detailed exception CSV files
 │
 ├── 📁 07_Reports
 │   └── .gitkeep
@@ -216,17 +222,19 @@ All data in this project is **simulated** and does not contain any real company 
 
 ## Key Findings
 
-> This section will be updated as analysis notebooks are completed.
+The Phase 6 dashboard consolidates the four fraud analytics workstreams into an executive view for Finance, Internal Audit, Procurement, and SAP control owners.
 
 ### Summary Dashboard
 
 | Fraud Category | Suspects Found | Financial Exposure (JPY) | Risk Level |
-|---|---|---|---|
-| Duplicate Invoices | — | — | 🔴 High |
-| Split Purchases | — | — | 🟠 High |
-| Abnormal Vendors | — | — | 🟡 Medium |
-| Approval Bypasses | — | — | 🔵 Medium |
-| **Total** | — | — | — |
+|---|---:|---:|---|
+| Duplicate Invoices | 67 | ¥60,706,000 | 🔴 High |
+| Split Purchases | 10 | ¥7,253,000 | 🟠 High |
+| Abnormal Vendors | 10 | ¥52,934,000 | 🟡 Medium |
+| Approval Bypasses | 15 | ¥10,723,000 | 🔵 Medium |
+| **Total** | **102** | **¥131,616,000** | — |
+
+The interactive HTML dashboard is available at `06. Visualization/outputs/fraud_dashboard.html`, with supporting summary and detailed exception CSV files in `06. Visualization/outputs/`.
 
 ---
 
@@ -350,8 +358,9 @@ jupyter notebook
 Step 1: Run vendor, purchase-order, and invoice generator scripts in 02_Data_Generation
 Step 2: Run SQL queries in 04_SQL_Analysis
 Step 3: Run notebooks in 05_Python_Analysis (01 to 04 in order)
-Step 4: Run fraud_dashboard.ipynb in 06. Visualization (next project phase)
-Step 5: Review reports in 07_Reports after the reporting phase is completed
+Step 4: Run the Phase 6 dashboard script or notebook:
+        python "06. Visualization/fraud_dashboard.py"
+Step 5: Open 06. Visualization/outputs/fraud_dashboard.html and review the generated CSV exception files
 ```
 
 ---

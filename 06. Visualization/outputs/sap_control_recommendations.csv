@@ -1,0 +1,5 @@
+fraud_category,risk_level,financial_exposure_jpy,recommended_sap_control
+Duplicate Invoices,High,60706000,Activate strict MIRO duplicate checks in OMRDC and monitor same-vendor near-match invoices before payment runs.
+Abnormal Vendors,Medium,52934000,"Enforce dual control over vendor master creation, bank account changes, and new-vendor payment review during the first 90 days."
+Approval Bypasses,Medium,10723000,Configure hard workflow stops when PO value exceeds employee authorization limits and review inactive approver assignments.
+Split Purchases,High,7253000,Add cumulative same-day vendor spend checks to MM release strategy and route threshold-adjacent POs to a second approver.
