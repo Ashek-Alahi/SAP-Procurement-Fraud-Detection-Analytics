@@ -1,0 +1,44 @@
+name: Render Notebook to HTML
+
+on:
+  push:
+    paths:
+      - '06. Visualization/**'
+      - '.github/workflows/render-dashboard.yml'
+  workflow_dispatch: {}
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install --quiet nbconvert jupyter ipykernel pandas numpy plotly seaborn matplotlib
+
+      - name: Render fraud_dashboard.ipynb to HTML (execute)
+        run: |
+          mkdir -p "06. Visualization"
+          jupyter nbconvert --to html "06. Visualization/fraud_dashboard.ipynb" \
+            --output-dir "06. Visualization" --output fraud_dashboard.html \
+            --ExecutePreprocessor.timeout=600 --ExecutePreprocessor.allow_errors=True --execute
+
+      - name: Commit rendered HTML back to repo
+        uses: EndBug/add-and-commit@v9
+        with:
+          author_name: 'github-actions[bot]'
+          author_email: '41898282+github-actions[bot]@users.noreply.github.com'
+          message: 'Auto-render fraud_dashboard.ipynb -> fraud_dashboard.html'
+          add: '06. Visualization/fraud_dashboard.html'
