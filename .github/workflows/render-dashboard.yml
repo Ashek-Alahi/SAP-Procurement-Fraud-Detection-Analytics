@@ -1,0 +1,48 @@
+name: Render Fraud Dashboard
+
+on:
+  push:
+    paths:
+      - '03_Data/**'
+      - '06. Visualization/**'
+      - '.github/workflows/render-dashboard.yml'
+  workflow_dispatch: {}
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install nbconvert ipykernel
+
+      - name: Build dashboard artifacts
+        run: python "06. Visualization/fraud_dashboard.py"
+
+      - name: Execute dashboard notebook
+        run: |
+          jupyter nbconvert --to notebook --execute "06. Visualization/fraud_dashboard.ipynb" \
+            --output fraud_dashboard.ipynb --output-dir "06. Visualization" \
+            --ExecutePreprocessor.timeout=600
+
+      - name: Commit rendered dashboard outputs
+        uses: EndBug/add-and-commit@v9
+        with:
+          author_name: 'github-actions[bot]'
+          author_email: '41898282+github-actions[bot]@users.noreply.github.com'
+          message: 'Auto-render fraud dashboard artifacts'
+          add: '06. Visualization/fraud_dashboard.ipynb 06. Visualization/outputs'

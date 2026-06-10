@@ -1,0 +1,5 @@
+fraud_category,suspects_found,financial_exposure_jpy,financial_exposure_formatted,risk_level
+Duplicate Invoices,67,60706000,"¥60,706,000",High
+Split Purchases,10,7253000,"¥7,253,000",High
+Abnormal Vendors,10,52934000,"¥52,934,000",Medium
+Approval Bypasses,15,10723000,"¥10,723,000",Medium

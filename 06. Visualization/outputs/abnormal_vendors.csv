@@ -1,0 +1,11 @@
+fraud_category,risk_level,vendor_id,vendor_name,bank_account_number,invoice_count,average_invoice_jpy,max_invoice_jpy,vendor_age_at_first_invoice_days,invoice_z_score,risk_reason,exposure_jpy,event_month
+Abnormal Vendors,Medium,VEND031,Toyama Seafood Logistics,JP1031-2245489,17,714000,1483000,72,-0.3,New vendor with high payment,12138000,2025-03
+Abnormal Vendors,Critical,VEND001,Sakura Seafood Co.,JP1001-2007919,17,706000,1449000,-258,-0.35,Duplicate bank account,12002000,2025-02
+Abnormal Vendors,Critical,VEND003,Kansai Linen Service,JP1003-2023757,9,834111.11,1615000,665,0.44,Duplicate bank account,7507000,2025-01
+Abnormal Vendors,Medium,VEND035,Roppongi Translation Services,JP1035-2277165,9,657333.33,1530000,23,-0.65,New vendor with high payment,5916000,2025-02
+Abnormal Vendors,Medium,VEND049,Nippon Facility Maint.,JP1049-2388031,6,613166.67,1277000,25,-0.93,New vendor with high payment,3679000,2025-11
+Abnormal Vendors,Medium,VEND005,Tokyo Guest Services,JP1005-2039595,6,493000,887000,62,-1.68,New vendor with high payment,2958000,2025-03
+Abnormal Vendors,Medium,VEND011,Setouchi Fish Market,JP1011-2087109,6,449833.33,1280000,84,-1.94,New vendor with high payment,2699000,2025-02
+Abnormal Vendors,Medium,VEND050,Tokyo Guest Service KK,JP1050-2395950,2,1219000,1305000,47,2.83,New vendor with high payment; Abnormally high average invoice,2438000,2025-12
+Abnormal Vendors,Critical,VEND048,Kansai Linen Servise,JP1003-2023757,3,664333.33,792000,-27,-0.61,Duplicate bank account,1993000,2025-09
+Abnormal Vendors,Critical,VEND046,Sakura Seafoods Co.,JP1001-2007919,2,802000,802000,24,0.24,New vendor with high payment; Duplicate bank account,1604000,2025-11
