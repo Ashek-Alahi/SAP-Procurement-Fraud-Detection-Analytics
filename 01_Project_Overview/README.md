@@ -32,8 +32,8 @@ SAP-Procurement-Fraud-Detection-Analytics/
 ├── 03_Data/                  # Generated CSV data files
 ├── 04_SQL_Analysis/          # SQL fraud detection queries
 ├── 05_Python_Analysis/       # Jupyter notebooks for deeper analytics
-├── 06_Visualizations/        # Executive dashboard and visual summaries
-├── 07_Reports/               # Findings, recommendations, and SAP control guidance
+├── 06. Visualization/        # Executive dashboard and visual summaries
+├── 07_Reports/               # Findings report, SAP controls, and remediation tracker
 └── README.md                 # Main project documentation
 ```
 

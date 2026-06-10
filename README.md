@@ -211,7 +211,10 @@ All data in this project is **simulated** and does not contain any real company 
 │       └── detailed exception CSV files
 │
 ├── 📁 07_Reports
-│   └── .gitkeep
+│   ├── README.md
+│   ├── executive_findings_report.md
+│   ├── sap_control_recommendations.md
+│   └── audit_action_register.csv
 │
 ├── .gitignore
 ├── requirements.txt
@@ -235,6 +238,8 @@ The Phase 6 dashboard consolidates the four fraud analytics workstreams into an 
 | **Total** | **102** | **¥131,616,000** | — |
 
 The interactive HTML dashboard is available at `06. Visualization/outputs/fraud_dashboard.html`, with supporting summary and detailed exception CSV files in `06. Visualization/outputs/`.
+
+The final Phase 7 reporting package is available in `07_Reports/`, including an executive findings report, SAP control remediation plan, and audit action register for remediation tracking.
 
 ---
 

@@ -197,7 +197,7 @@ The executive dashboard will summarize:
 | Phase 4 | Python analysis notebooks | Demonstrate analytics, statistics, and visualization capability |
 | Phase 5 | Executive fraud dashboard | Communicate risk exposure to management |
 | Phase 6 | SAP control recommendations | Connect findings to ERP configuration and process fixes |
-| Phase 7 | Final README and findings report | Create portfolio-ready documentation |
+| Phase 7 | Final reports and remediation tracker | Create portfolio-ready executive, SAP control, and audit documentation |
 
 ## 10. Assumptions
 
