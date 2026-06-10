@@ -6,9 +6,9 @@ This folder contains the SQL analytics layer for the SAP Procurement Fraud Detec
 
 | File | Fraud pattern | SAP context | Primary output |
 |---|---|---|---|
-| `duplicate_invoices.sql` | Same vendor, same amount, invoices posted within 30 days | Extends MIRO-style duplicate invoice checks over RBKP/RSEG-like data | Suspected duplicate invoice pairs, vendor names, posting gap, and total value at risk |
+| `duplicate_invoices.sql` | Same vendor, amount within 5%, invoices posted within 30 days | Extends MIRO-style duplicate invoice checks over RBKP/RSEG-like data | Suspected duplicate invoice pairs, vendor names, posting gap, and total value at risk |
 | `split_purchases.sql` | Multiple same-day POs below ¥500,000 that exceed ¥500,000 in total | Detects SAP MM workflow/release strategy threshold circumvention | Vendors, split dates, PO numbers, individual amounts, combined total, and split counts |
-| `abnormal_vendors.sql` | New high-payment vendors, one-invoice high-value vendors, duplicate bank accounts, and inactivity/reactivation | Reviews LFA1/LFB1-like vendor master risks for ghost/shell vendor indicators | Vendor-level risk categories, related master-data details, and exposure roll-ups |
+| `abnormal_vendors.sql` | New high-payment vendors, abnormal invoice amount Z-scores, one-invoice high-value vendors, duplicate bank accounts, and inactivity/reactivation | Reviews LFA1/LFB1-like vendor master risks for ghost/shell vendor indicators | Vendor-level risk categories, related master-data details, and exposure roll-ups |
 | `approval_bypass.sql` | PO amount exceeds approving employee authority limit, plus missing/inactive approvers | Tests SAP MM release strategy and workflow approval governance | PO number, amount, approver, approval limit, excess amount, and exception summary |
 
 ## How to Run in SQLite

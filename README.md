@@ -200,13 +200,12 @@ All data in this project is **simulated** and does not contain any real company 
 │   ├── 03_abnormal_vendor_detection.ipynb
 │   └── 04_approval_bypass_detection.ipynb
 │
-├── 📁 06_Visualizations
+├── 📁 06. Visualization
 │   ├── fraud_dashboard.ipynb
-│   └── findings_summary.ipynb
+│   └── gitkeep
 │
 ├── 📁 07_Reports
-│   ├── fraud_detection_report.md
-│   └── sap_control_recommendations.md
+│   └── .gitkeep
 │
 ├── .gitignore
 ├── requirements.txt
@@ -339,8 +338,6 @@ pip install -r requirements.txt
 python 02_Data_Generation/generate_vendors.py
 python 02_Data_Generation/generate_purchase_orders.py
 python 02_Data_Generation/generate_invoices.py
-python 02_Data_Generation/inject_fraud_patterns.py
-
 # Open Jupyter Notebook
 jupyter notebook
 
@@ -350,11 +347,11 @@ jupyter notebook
 ### Run Order
 
 ```
-Step 1: Run all scripts in 02_Data_Generation
+Step 1: Run vendor, purchase-order, and invoice generator scripts in 02_Data_Generation
 Step 2: Run SQL queries in 04_SQL_Analysis
 Step 3: Run notebooks in 05_Python_Analysis (01 to 04 in order)
-Step 4: Run fraud_dashboard.ipynb in 06_Visualizations
-Step 5: Review reports in 07_Reports
+Step 4: Run fraud_dashboard.ipynb in 06. Visualization (next project phase)
+Step 5: Review reports in 07_Reports after the reporting phase is completed
 ```
 
 ---

@@ -1,0 +1,9 @@
+# Core data analysis dependencies for phases 02-05.
+pandas>=2.2
+numpy>=1.26
+matplotlib>=3.8
+seaborn>=0.13
+jupyter>=1.1
+
+# Included for the next dashboard phase; not required by the current SQL/Python checks.
+plotly>=5.22

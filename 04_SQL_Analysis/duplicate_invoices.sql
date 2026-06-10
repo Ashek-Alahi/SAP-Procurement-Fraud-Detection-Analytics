@@ -8,14 +8,17 @@
 --   RBKP-RMWWR, RBKP-XBLNR, and RBKP-BUDAT.
 --
 -- Fraud pattern:
---   Same vendor + same invoice amount + posted within 30 days = likely duplicate.
+--   Same vendor + invoice amount within 5% + posted within 30 days = likely duplicate.
 --
 -- Assumptions:
 --   * SQLite-compatible SQL using julianday() for date differences.
 --   * invoices.posting_date is the SAP posting date used for the duplicate window.
 --   * The second/later invoice amount is counted as the value at risk.
+--   * Amount tolerance is 5%, matching the project README and Python analysis.
 
-WITH duplicate_pairs AS (
+WITH duplicate_parameters AS (
+    SELECT 0.05 AS amount_tolerance_pct
+), duplicate_pairs AS (
     SELECT
         v.vendor_id,
         v.vendor_name,
@@ -26,6 +29,11 @@ WITH duplicate_pairs AS (
         i2.invoice_id AS suspected_duplicate_invoice_id,
         i2.invoice_number AS suspected_duplicate_invoice_number,
         CAST(i2.invoice_amount AS INTEGER) AS suspected_duplicate_amount_jpy,
+        ROUND(
+            ABS(CAST(i1.invoice_amount AS REAL) - CAST(i2.invoice_amount AS REAL))
+            / MAX(CAST(i1.invoice_amount AS REAL), CAST(i2.invoice_amount AS REAL)),
+            4
+        ) AS amount_difference_pct,
         i2.posting_date AS suspected_duplicate_posting_date,
         CAST(julianday(i2.posting_date) - julianday(i1.posting_date) AS INTEGER) AS days_between_postings,
         CAST(i2.invoice_amount AS INTEGER) AS value_at_risk_jpy,
@@ -34,7 +42,10 @@ WITH duplicate_pairs AS (
     FROM invoices AS i1
     INNER JOIN invoices AS i2
         ON i1.vendor_id = i2.vendor_id
-       AND CAST(i1.invoice_amount AS INTEGER) = CAST(i2.invoice_amount AS INTEGER)
+       AND ABS(CAST(i1.invoice_amount AS REAL) - CAST(i2.invoice_amount AS REAL))
+           / MAX(CAST(i1.invoice_amount AS REAL), CAST(i2.invoice_amount AS REAL)) <= (
+               SELECT amount_tolerance_pct FROM duplicate_parameters
+           )
        AND i1.invoice_id <> i2.invoice_id
        AND julianday(i2.posting_date) >= julianday(i1.posting_date)
        AND (
@@ -55,6 +66,7 @@ SELECT
     suspected_duplicate_invoice_id,
     suspected_duplicate_invoice_number,
     suspected_duplicate_amount_jpy,
+    amount_difference_pct,
     suspected_duplicate_posting_date,
     days_between_postings,
     value_at_risk_jpy,
@@ -64,7 +76,9 @@ FROM duplicate_pairs
 ORDER BY suspected_duplicate_posting_date DESC, value_at_risk_jpy DESC, vendor_name;
 
 -- Executive roll-up: total duplicate exposure and vendors involved.
-WITH duplicate_pairs AS (
+WITH duplicate_parameters AS (
+    SELECT 0.05 AS amount_tolerance_pct
+), duplicate_pairs AS (
     SELECT
         v.vendor_id,
         v.vendor_name,
@@ -74,7 +88,10 @@ WITH duplicate_pairs AS (
     FROM invoices AS i1
     INNER JOIN invoices AS i2
         ON i1.vendor_id = i2.vendor_id
-       AND CAST(i1.invoice_amount AS INTEGER) = CAST(i2.invoice_amount AS INTEGER)
+       AND ABS(CAST(i1.invoice_amount AS REAL) - CAST(i2.invoice_amount AS REAL))
+           / MAX(CAST(i1.invoice_amount AS REAL), CAST(i2.invoice_amount AS REAL)) <= (
+               SELECT amount_tolerance_pct FROM duplicate_parameters
+           )
        AND i1.invoice_id <> i2.invoice_id
        AND julianday(i2.posting_date) >= julianday(i1.posting_date)
        AND (

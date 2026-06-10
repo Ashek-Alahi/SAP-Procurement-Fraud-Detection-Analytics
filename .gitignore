@@ -1,0 +1,17 @@
+# Python runtime artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Notebook runtime artifacts
+.ipynb_checkpoints/
+
+# Local OS/editor files
+.DS_Store
+.vscode/
+.idea/
